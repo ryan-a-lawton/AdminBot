@@ -25,9 +25,8 @@ async def on_message(message):
                 counter += 1
         for i in client.servers:
             print(i.id)
-
-        print(client.servers['114691817177481220'])
         await client.edit_message(tmp, 'You have {} messages.'.format(counter))
+        
     elif message.content.startswith('!create'):
         components = message.content.split(" ")
         string = ','.join(components)
@@ -78,7 +77,7 @@ async def on_message(message):
             else:
                 await client.send_message(message.channel, 'You do not have permission to delete this channel')
         else:
-            print("WHAT THE HELL IS GOING ON")
+            await client.send_message(message.channel, 'No such channel type exists')
             
     elif message.content.startswith('!cancel'):
         components = message.content.split(" ")
