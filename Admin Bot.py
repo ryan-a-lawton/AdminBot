@@ -1,6 +1,8 @@
 import discord
 import asyncio
-import processControl.py
+import processControl
+from processControl import configureCheck
+from processControl import removeCommand
 
 client = discord.Client()
 
@@ -24,11 +26,15 @@ async def on_message(message):
     elif message.content.startswith('!create'):
         components = message.content.split(" ")
         string = ','.join(components)
-        if(configureCheck):
-            
+        if(configureCheck(components)):
+            print()
         await client.send_message(message.channel, 'Created %s channel %s' % (components[1], components[2]))
+        await client.send_message(message.channel, '!PINNED %s channel %s' % (components[1], components[2]))
     elif message.content.startswith('!sleep'):
         await asyncio.sleep(5)
         await client.send_message(message.channel, 'Done sleeping')
+    elif message.content.startswith('!PINNED') and str(message.author) == 'Administrator Bot#5712':
+        await client.pin_message(message)
+
 
 client.run('MzIyMzUwMzI1MTYyMDQ5NTM2.DBrhPA.Yaue1LcH8f_Idevh9peUatODqWs')
