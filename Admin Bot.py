@@ -3,7 +3,7 @@ import asyncio
 import processControl
 from processControl import configureCheck
 from processControl import removeCommand
-
+from processControl import retrieveServer
 client = discord.Client()
 
 @client.event
@@ -21,15 +21,27 @@ async def on_message(message):
         async for log in client.logs_from(message.channel, limit=100):
             if log.author == message.author:
                 counter += 1
+        for i in client.servers:
+            print(i.id)
 
+        print(client.servers['114691817177481220'])
         await client.edit_message(tmp, 'You have {} messages.'.format(counter))
     elif message.content.startswith('!create'):
         components = message.content.split(" ")
         string = ','.join(components)
         if(configureCheck(components)):
-            print()
-        await client.send_message(message.channel, 'Created %s channel %s' % (components[1], components[2]))
-        await client.send_message(message.channel, '!PINNED %s channel %s' % (components[1], components[2]))
+            server = retrieveServer(client.servers, message.channel)
+            
+            await client.send_message(message.channel, '!PINNED %s channel %s' % (components[1], components[2]))
+            everyone_perms = discord.PermissionOverwrite(read_messages=False)
+            my_perms = discord.PermissionOverwrite(read_messages=True)
+
+            everyone = discord.ChannelPermissions(target=server.default_role, overwrite=everyone_perms)
+            mine = discord.ChannelPermissions(target=message.author, overwrite=my_perms)
+            await client.create_channel(server, components[2], everyone, mine) 
+        else:
+            await client.send_message(message.channel, 'Unknown command')
+        
     elif message.content.startswith('!sleep'):
         await asyncio.sleep(5)
         await client.send_message(message.channel, 'Done sleeping')

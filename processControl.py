@@ -14,3 +14,9 @@ def removeCommand(components):
     comp.pop()
     comp = comp[::-1]
     return comp
+
+def retrieveServer(servers, channel):
+    for i in servers:
+        for j in i.channels:
+            if j.id == channel.id:
+                return i
