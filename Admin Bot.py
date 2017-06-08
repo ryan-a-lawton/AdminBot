@@ -30,23 +30,44 @@ async def on_message(message):
         components = message.content.split(" ")
         string = ','.join(components)
         if(configureCheck(components)):
+            '''retrieve Server by matching channel id's between bots servers'''
             server = retrieveServer(client.servers, message.channel)
             
             await client.send_message(message.channel, '!PINNED %s channel %s' % (components[1], components[2]))
-            everyone_perms = discord.PermissionOverwrite(read_messages=False)
-            my_perms = discord.PermissionOverwrite(read_messages=True)
 
+            '''Create permisson fields'''
+            everyone_perms = discord.PermissionOverwrite(read_messages=False, send_messages=False)
+            my_perms = discord.PermissionOverwrite(read_messages=True, manage_roles=True, manage_channels=True, send_messages=True)
+
+            '''Assign users with permission fields'''
             everyone = discord.ChannelPermissions(target=server.default_role, overwrite=everyone_perms)
             mine = discord.ChannelPermissions(target=message.author, overwrite=my_perms)
+
+            '''Construct Server'''
             await client.create_channel(server, components[2], everyone, mine) 
         else:
             await client.send_message(message.channel, 'Unknown command')
-        
+
+    elif message.content.startswith('!delete'):
+        components = message.content.split(" ")
+        string = ','.join(components)
+        if(configureCheck(components)):
+            server = retrieveServer(client.servers, message.channel)
+            for i in message.author.permissions_in(message.channel):
+                if i[0] == 'manage_channels' and i[1] == True:
+                    await client.delete_channel(message.channel)
+            try:
+                await client.send_message(message.channel, 'You do not have permission to delete this channel')
+            except:
+                print('Channel deleted')
+        else:
+            await client.send_message(message.channel, '!PINNED %s channel %s' % (components[1], components[2]))
+            
     elif message.content.startswith('!sleep'):
         await asyncio.sleep(5)
         await client.send_message(message.channel, 'Done sleeping')
     elif message.content.startswith('!PINNED') and str(message.author) == 'Administrator Bot#5712':
-        await client.pin_message(message)
+        '''await client.pin_message(message)'''
 
 
 client.run('MzIyMzUwMzI1MTYyMDQ5NTM2.DBrhPA.Yaue1LcH8f_Idevh9peUatODqWs')
