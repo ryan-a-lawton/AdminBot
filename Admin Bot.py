@@ -54,7 +54,7 @@ async def on_message(message):
         if(configureCheck(components)):
             server = retrieveServer(client.servers, message.channel)
             for i in message.author.permissions_in(message.channel):
-                if i[0] == 'manage_channels' and i[1] == True:
+                if i[0] == 'manage_roles' and i[1] == True:
                     await client.delete_channel(message.channel)
             try:
                 await client.send_message(message.channel, 'You do not have permission to delete this channel')
