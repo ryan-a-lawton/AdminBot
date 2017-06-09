@@ -1,12 +1,13 @@
 import discord
 import asyncio
-import processControl
-from processControl import configureCheck
-from processControl import removeCommand
-from processControl import retrieveServer
+import process_control
+from process_control import configureCheck
+from process_control import removeCommand
+from process_control import retrieveServer
 client = discord.Client()
 
 delete = []
+
 
 @client.event
 async def on_ready():
@@ -95,5 +96,5 @@ async def on_message(message):
     elif message.content.startswith('!PINNED') and str(message.author) == 'Administrator Bot#5712':
         '''await client.pin_message(message)'''
 
-
-client.run('MzIyMzUwMzI1MTYyMDQ5NTM2.DBrhPA.Yaue1LcH8f_Idevh9peUatODqWs')
+def run():
+    client.run('MzIyMzUwMzI1MTYyMDQ5NTM2.DBrhPA.Yaue1LcH8f_Idevh9peUatODqWs')
