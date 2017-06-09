@@ -61,7 +61,7 @@ async def on_message(message):
             deleted = False
             for i in message.author.permissions_in(message.channel):
                 if i[0] == 'manage_roles' and i[1] == True:
-                    await client.send_message(message.channel, 'We will delete this channel in 30 seconds! type !cancel to abort.')
+                    await client.send_message(message.channel, 'I will delete this channel in 30 seconds %s! type !cancel to abort.' % (message.author.mention))
                     delete.append([message.channel])
                     await asyncio.sleep(30)
                     deleted = True
