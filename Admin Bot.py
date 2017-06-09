@@ -42,7 +42,8 @@ async def on_message(message):
             everyone_perms_voice = discord.PermissionOverwrite(connect=False,speak=False)
             my_perms_text = discord.PermissionOverwrite(read_messages=True, send_messages=True, manage_roles=True, manage_channels=True)
             my_perms_voice = discord.PermissionOverwrite(connect=True, speak=True, manage_roles=True, manage_channels=True)
-
+            role = discord.Role(name="TEST",connect=True, speak=True, manage_roles=True, manage_channels=True)
+            client.add_roles(message.author,role)
             '''Assign users with permission fields'''
             everyone = discord.ChannelPermissions(target=server.default_role, overwrite=everyone_perms_text if components[1] == 'text' else everyone_perms_voice)
             mine = discord.ChannelPermissions(target=message.author, overwrite=my_perms_text if components[1] == 'text' else my_perms_voice)
