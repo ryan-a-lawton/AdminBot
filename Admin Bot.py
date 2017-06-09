@@ -26,15 +26,15 @@ async def on_message(message):
         for i in client.servers:
             print(i.id)
         await client.edit_message(tmp, 'You have {} messages.'.format(counter))
-        
+
     elif message.content.startswith('!create'):
         components = message.content.split(" ")
         string = ','.join(components)
         if(configureCheck(components)):
             '''retrieve Server by matching channel id's between bots servers'''
             server = retrieveServer(client.servers, message.channel)
-            
-            await client.send_message(message.channel, 'Created a %s channel called %s, owner is @%s' % (components[1], components[2], message.author))
+
+            await client.send_message(message.channel, 'Created a %s channel called %s, owner is %s' % (components[1], components[2], message.author.mention))
 
 
             '''Create permisson fields'''
@@ -49,7 +49,7 @@ async def on_message(message):
 
             '''Construct Server'''
             await client.create_channel(server, components[2], everyone, mine, type=None if components[1] == 'text' else discord.ChannelType.voice)
-                
+
         else:
             await client.send_message(message.channel, 'Unknown command')
 
@@ -68,7 +68,7 @@ async def on_message(message):
                     for j in delete:
                         if j[0].id == message.channel.id:
                             await client.delete_channel(message.channel)
-                        
+
             if(deleted):
                 try:
                     await client.send_message(message.channel, 'You have successfully aborted the deletion process!')
@@ -78,7 +78,7 @@ async def on_message(message):
                 await client.send_message(message.channel, 'You do not have permission to delete this channel')
         else:
             await client.send_message(message.channel, 'No such channel type exists')
-            
+
     elif message.content.startswith('!cancel'):
         components = message.content.split(" ")
         string = ','.join(components)
@@ -90,7 +90,7 @@ async def on_message(message):
                         if j[0].id == message.channel.id:
                             delete.remove(j)
 
-        
+
     elif message.content.startswith('!PINNED') and str(message.author) == 'Administrator Bot#5712':
         '''await client.pin_message(message)'''
 
