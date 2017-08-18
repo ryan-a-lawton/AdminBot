@@ -43,14 +43,18 @@ async def on_message(message):
             everyone_perms_voice = discord.PermissionOverwrite(connect=False,speak=False)
             my_perms_text = discord.PermissionOverwrite(read_messages=True, send_messages=True, manage_roles=True, manage_channels=True)
             my_perms_voice = discord.PermissionOverwrite(connect=True, speak=True, manage_roles=True, manage_channels=True)
-
-            role_perms = discord.PermissionOverwrite(connect=True, speak=True, manage_roles=True, manage_channels=True)
-            discord.Server.roles(discord.Role(server, permissions=role_perms))
-            for i in server.role_hierarchy:
-                print(i)
+			
+            role_admin_name = components[2] + "_ADMIN"
+			
+            await client.create_role(server, name=role_admin_name, connect=True, speak=True, manage_roles=True, manage_channels=True)
+            await client.create_role(server, name=components[2], connect=True, speak=True, manage_roles=True, manage_channels=True)
+            role_admin = discord.utils.get(server.roles, name=role_admin_name)
+            role = discord.utils.get(server.roles, name=components[2])
+            await client.add_roles(message.author, role_admin)
+			
             '''Assign users with permission fields'''
             everyone = discord.ChannelPermissions(target=server.default_role, overwrite=everyone_perms_text if components[1] == 'text' else everyone_perms_voice)
-            mine = discord.ChannelPermissions(target=message.author, overwrite=my_perms_text if components[1] == 'text' else my_perms_voice)
+            mine = discord.ChannelPermissions(target=role_admin, overwrite=my_perms_text if components[1] == 'text' else my_perms_voice)
 
             '''Construct Server'''
             await client.create_channel(server, components[2], everyone, mine, type=None if components[1] == 'text' else discord.ChannelType.voice)
@@ -68,10 +72,25 @@ async def on_message(message):
                 if i[0] == 'manage_roles' and i[1] == True:
                     await client.send_message(message.channel, 'I will delete this channel in 30 seconds %s! type !cancel to abort.' % (message.author.mention))
                     delete.append([message.channel])
-                    await asyncio.sleep(30)
+                    await asyncio.sleep(20)
+                    await client.send_message(message.channel, '10 seconds remaining. %s' % (message.author.mention))
+                    await asyncio.sleep(5)
+                    await client.send_message(message.channel, '5 seconds remaining. %s' % (message.author.mention))
+                    await asyncio.sleep(1)
+                    await client.send_message(message.channel, '4 seconds remaining. %s' % (message.author.mention))
+                    await asyncio.sleep(1)
+                    await client.send_message(message.channel, '3 seconds remaining. %s' % (message.author.mention))
+                    await asyncio.sleep(1)
+                    await client.send_message(message.channel, '2 seconds remaining. %s' % (message.author.mention))
+                    await asyncio.sleep(1)
+                    await client.send_message(message.channel, '1 seconds remaining. %s' % (message.author.mention))
+                    await asyncio.sleep(1)
                     deleted = True
                     for j in delete:
                         if j[0].id == message.channel.id:
+                            role_admin_name = message.channel.name + "_ADMIN"
+                            await client.delete_role(server, discord.utils.get(server.roles, name=role_admin_name))
+                            await client.delete_role(server, discord.utils.get(server.roles, name=message.channel.name))
                             await client.delete_channel(message.channel)
 
             if(deleted):
@@ -100,4 +119,4 @@ async def on_message(message):
         '''await client.pin_message(message)'''
 
 def run():
-    client.run('MzIyMzUwMzI1MTYyMDQ5NTM2.DBrhPA.Yaue1LcH8f_Idevh9peUatODqWs')
+    client.run('MzIyMzUwMzI1MTYyMDQ5NTM2.DHfj_Q.XFgvVyTuKrLqOAHlM66no83olWc')
