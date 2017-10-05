@@ -33,7 +33,7 @@ async def on_message(message):
         components = message.content.split(" ")
         string = ','.join(components)
         if(configureCheck(components)):
-            if components[1] == 'voice': components[2] = components[2] + '_voice'
+            if components[1] == 'voice': components[2] = components[2] + '-voice'
             '''retrieve Server by matching channel id's between bots servers'''
             server = retrieveServer(client.servers, message.channel)
 
@@ -45,13 +45,13 @@ async def on_message(message):
             everyone_perms_voice = discord.PermissionOverwrite(connect=False,speak=False)
             master_perms_text = discord.PermissionOverwrite(read_messages=True, send_messages=True, manage_roles=True, manage_channels=True)
             master_perms_voice = discord.PermissionOverwrite(connect=True, speak=True, manage_roles=True, manage_channels=True)
-            servant_perms_text = discord.PermissionOverwrite(read_messages=True, send_messages=True, manage_roles=True)
+            servant_perms_text = discord.PermissionOverwrite(read_messages=True, send_messages=True)
             servant_perms_voice = discord.PermissionOverwrite(connect=True, speak=True)
 			
             role_admin_name = components[2] + "_ADMIN"
 			
             await client.create_role(server, name=role_admin_name, connect=True, speak=True, manage_roles=True, manage_channels=True)
-            await client.create_role(server, name=components[2], connect=True, speak=True, manage_roles=True, manage_channels=True)
+            await client.create_role(server, name=components[2], connect=True, speak=True)
             role_admin = discord.utils.get(server.roles, name=role_admin_name)
             role = discord.utils.get(server.roles, name=components[2])
             await client.add_roles(message.author, role_admin)
