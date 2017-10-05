@@ -42,8 +42,10 @@ async def on_message(message):
             '''Create permisson fields'''
             everyone_perms_text = discord.PermissionOverwrite(read_messages=False, send_messages=False)
             everyone_perms_voice = discord.PermissionOverwrite(connect=False,speak=False)
-            my_perms_text = discord.PermissionOverwrite(read_messages=True, send_messages=True, manage_roles=True, manage_channels=True)
-            my_perms_voice = discord.PermissionOverwrite(connect=True, speak=True, manage_roles=True, manage_channels=True)
+            master_perms_text = discord.PermissionOverwrite(read_messages=True, send_messages=True, manage_roles=True, manage_channels=True)
+            master_perms_voice = discord.PermissionOverwrite(connect=True, speak=True, manage_roles=True, manage_channels=True)
+            servant_perms_text = discord.PermissionOverwrite(read_messages=True, send_messages=True, manage_roles=True)
+            servant_perms_voice = discord.PermissionOverwrite(connect=True, speak=True)
 			
             role_admin_name = components[2] + "_ADMIN"
 			
@@ -55,10 +57,11 @@ async def on_message(message):
 			
             '''Assign users with permission fields'''
             everyone = discord.ChannelPermissions(target=server.default_role, overwrite=everyone_perms_text if components[1] == 'text' else everyone_perms_voice)
-            mine = discord.ChannelPermissions(target=role_admin, overwrite=my_perms_text if components[1] == 'text' else my_perms_voice)
+            master = discord.ChannelPermissions(target=role_admin, overwrite=master_perms_text if components[1] == 'text' else master_perms_voice)
+            servant = discord.ChannelPermissions(target=, overwrite=servant_perms_text if components[1] == 'text' else servant_perms_voice)
 
             '''Construct Server'''
-            await client.create_channel(server, components[2], everyone, mine, type=None if components[1] == 'text' else discord.ChannelType.voice)
+            await client.create_channel(server, components[2], everyone, master, servent, type=None if components[1] == 'text' else discord.ChannelType.voice)
 
         else:
             await client.send_message(message.channel, 'Unknown command')
