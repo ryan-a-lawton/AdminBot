@@ -105,9 +105,8 @@ async def on_message(message):
                 channel = discord.utils.get(server.channels, name=components[2])
                 for i in message.author.permissions_in(channel):
                     if i[0] == 'manage_roles' and i[1] == True:
-                        await client.send_message(message.channel, 'I will delete this channel in 30 seconds %s! type !cancel to abort.' % (message.author.mention))
+                        await client.send_message(message.channel, 'I will delete that channel in 30 seconds %s! type !cancel to abort.' % (message.author.mention))
                         delete.append([channel])
-                        print(channel.name+'3')
                         await asyncio.sleep(20)
                         await client.send_message(message.channel, '10 seconds remaining. %s' % (message.author.mention))
                         await asyncio.sleep(5)
@@ -128,12 +127,6 @@ async def on_message(message):
                                 await client.delete_role(server, discord.utils.get(server.roles, name=role_admin_name))
                                 await client.delete_role(server, discord.utils.get(server.roles, name=channel.name))
                                 await client.delete_channel(channel)
-
-            if(deleted):
-                try:
-                    await client.send_message(message.channel, 'You have successfully aborted the deletion process!')
-                except:
-                    print()
             else:
                 await client.send_message(message.channel, 'You do not have permission to delete this channel')
         else:
