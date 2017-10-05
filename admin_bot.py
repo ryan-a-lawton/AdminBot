@@ -33,6 +33,7 @@ async def on_message(message):
         components = message.content.split(" ")
         string = ','.join(components)
         if(configureCheck(components)):
+            if components[1] == 'voice': components[2] = components[2] + '_voice'
             '''retrieve Server by matching channel id's between bots servers'''
             server = retrieveServer(client.servers, message.channel)
 
