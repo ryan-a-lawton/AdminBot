@@ -4,6 +4,7 @@ import process_control
 from process_control import configureCheck
 from process_control import removeCommand
 from process_control import retrieveServer
+from process_control import cleanID
 client = discord.Client()
 
 delete = []
@@ -113,6 +114,23 @@ async def on_message(message):
                     for j in delete:
                         if j[0].id == message.channel.id:
                             delete.remove(j)
+
+    elif message.content.startswith('!add'):
+        components = message.content.split(" ")
+        string = ','.join(components)
+        server = retrieveServer(client.servers, message.channel)
+        channel_name = components[1]
+        comp = components[::-1]
+        comp.pop()
+        comp.pop()
+        comp = comp[::-1]
+        for i in message.author.permissions_in(message.channel):
+            if i[0] == 'manage_roles' and i[1] == True:
+                for j in comp:
+                    ID = cleanID(j);
+                    roleName = discord.utils.get(server.roles, name=channel_name)
+                    await client.add_roles(server.get_member(ID), roleName)
+                    
 
 
     elif message.content.startswith('!PINNED') and str(message.author) == 'Administrator Bot#5712':

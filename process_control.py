@@ -20,3 +20,13 @@ def retrieveServer(servers, channel):
         for j in i.channels:
             if j.id == channel.id:
                 return i
+
+def cleanID(iD):
+    ID = list(iD)
+    ID = ID[::-1]
+    ID.pop()
+    ID.pop()
+    ID.pop()
+    ID = ID[::-1]
+    ID.pop()
+    return "".join(ID)
