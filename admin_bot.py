@@ -70,32 +70,63 @@ async def on_message(message):
         components = message.content.split(" ")
         string = ','.join(components)
         if(configureCheck(components)):
+            '''Create server definition'''
             server = retrieveServer(client.servers, message.channel)
             deleted = False
-            for i in message.author.permissions_in(message.channel):
-                if i[0] == 'manage_roles' and i[1] == True:
-                    await client.send_message(message.channel, 'I will delete this channel in 30 seconds %s! type !cancel to abort.' % (message.author.mention))
-                    delete.append([message.channel])
-                    await asyncio.sleep(20)
-                    await client.send_message(message.channel, '10 seconds remaining. %s' % (message.author.mention))
-                    await asyncio.sleep(5)
-                    await client.send_message(message.channel, '5 seconds remaining. %s' % (message.author.mention))
-                    await asyncio.sleep(1)
-                    await client.send_message(message.channel, '4 seconds remaining. %s' % (message.author.mention))
-                    await asyncio.sleep(1)
-                    await client.send_message(message.channel, '3 seconds remaining. %s' % (message.author.mention))
-                    await asyncio.sleep(1)
-                    await client.send_message(message.channel, '2 seconds remaining. %s' % (message.author.mention))
-                    await asyncio.sleep(1)
-                    await client.send_message(message.channel, '1 seconds remaining. %s' % (message.author.mention))
-                    await asyncio.sleep(1)
-                    deleted = True
-                    for j in delete:
-                        if j[0].id == message.channel.id:
-                            role_admin_name = message.channel.name + "_ADMIN"
-                            await client.delete_role(server, discord.utils.get(server.roles, name=role_admin_name))
-                            await client.delete_role(server, discord.utils.get(server.roles, name=message.channel.name))
-                            await client.delete_channel(message.channel)
+
+            '''check to see if we are deleting current channel or a specific channel'''
+            if(len(components)==1):
+                for i in message.author.permissions_in(message.channel):
+                    if i[0] == 'manage_roles' and i[1] == True:
+                        await client.send_message(message.channel, 'I will delete this channel in 30 seconds %s! type !cancel to abort.' % (message.author.mention))
+                        delete.append([message.channel])
+                        await asyncio.sleep(20)
+                        await client.send_message(message.channel, '10 seconds remaining. %s' % (message.author.mention))
+                        await asyncio.sleep(5)
+                        await client.send_message(message.channel, '5 seconds remaining. %s' % (message.author.mention))
+                        await asyncio.sleep(1)
+                        await client.send_message(message.channel, '4 seconds remaining. %s' % (message.author.mention))
+                        await asyncio.sleep(1)
+                        await client.send_message(message.channel, '3 seconds remaining. %s' % (message.author.mention))
+                        await asyncio.sleep(1)
+                        await client.send_message(message.channel, '2 seconds remaining. %s' % (message.author.mention))
+                        await asyncio.sleep(1)
+                        await client.send_message(message.channel, '1 seconds remaining. %s' % (message.author.mention))
+                        await asyncio.sleep(1)
+                        deleted = True
+                        for j in delete:
+                            if j[0].id == message.channel.id:
+                                role_admin_name = message.channel.name + "_ADMIN"
+                                await client.delete_role(server, discord.utils.get(server.roles, name=role_admin_name))
+                                await client.delete_role(server, discord.utils.get(server.roles, name=message.channel.name))
+                                await client.delete_channel(message.channel)
+            elif(len(components)==3):
+                channel = discord.utils.get(server.channels, name=components[2])
+                for i in message.author.permissions_in(channel):
+                    if i[0] == 'manage_roles' and i[1] == True:
+                        await client.send_message(message.channel, 'I will delete this channel in 30 seconds %s! type !cancel to abort.' % (message.author.mention))
+                        delete.append([channel])
+                        print(channel.name+'3')
+                        await asyncio.sleep(20)
+                        await client.send_message(message.channel, '10 seconds remaining. %s' % (message.author.mention))
+                        await asyncio.sleep(5)
+                        await client.send_message(message.channel, '5 seconds remaining. %s' % (message.author.mention))
+                        await asyncio.sleep(1)
+                        await client.send_message(message.channel, '4 seconds remaining. %s' % (message.author.mention))
+                        await asyncio.sleep(1)
+                        await client.send_message(message.channel, '3 seconds remaining. %s' % (message.author.mention))
+                        await asyncio.sleep(1)
+                        await client.send_message(message.channel, '2 seconds remaining. %s' % (message.author.mention))
+                        await asyncio.sleep(1)
+                        await client.send_message(message.channel, '1 seconds remaining. %s' % (message.author.mention))
+                        await asyncio.sleep(1)
+                        deleted = True
+                        for j in delete:
+                            if j[0].id == channel.id:
+                                role_admin_name = channel.name + "_ADMIN"
+                                await client.delete_role(server, discord.utils.get(server.roles, name=role_admin_name))
+                                await client.delete_role(server, discord.utils.get(server.roles, name=channel.name))
+                                await client.delete_channel(channel)
 
             if(deleted):
                 try:
