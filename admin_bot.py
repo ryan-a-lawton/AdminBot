@@ -5,6 +5,7 @@ from process_control import configureCheck
 from process_control import removeCommand
 from process_control import retrieveServer
 from process_control import cleanID
+import IDSTRING
 client = discord.Client()
 
 delete = []
@@ -158,6 +159,10 @@ async def on_message(message):
                     ID = cleanID(j);
                     roleName = discord.utils.get(server.roles, name=channel_name)
                     await client.add_roles(server.get_member(ID), roleName)
+
+    elif message.content.startswith('!ping'):
+        ping = discord.client;
+        await client.send_message(message.channel, ping.ping)
                     
 
 
@@ -165,4 +170,4 @@ async def on_message(message):
         '''await client.pin_message(message)'''
 
 def run():
-    client.run('MzIyMzUwMzI1MTYyMDQ5NTM2.DHfj_Q.XFgvVyTuKrLqOAHlM66no83olWc')
+    client.run(IDSTRING.STRING())
